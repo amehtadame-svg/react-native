@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.sm,
     padding: SPACING.sm,
     ...TYPOGRAPHY.body,
-    color: COLORS.text,
+    color: COLORS.textPrimary,
   },
   multiline: { minHeight: 96, paddingTop: SPACING.sm },
   button: {
