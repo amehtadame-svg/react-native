@@ -1,0 +1,12 @@
+{
+  "expo": {
+    "name": "Fundaciones Navigation",
+    "slug": "fundaciones-navigation",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": { "supportsTablet": true, "bundleIdentifier": "dev.bootcamp.fundacionesnavigation" },
+    "android": { "package": "dev.bootcamp.fundacionesnavigation" },
+    "newArchEnabled": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Fundaciones que inspiran",
+    "slug": "fundaciones-que-inspiran",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "ios": { "supportsTablet": false, "bundleIdentifier": "com.bootcamp.fundaciones" },
+    "android": { "package": "com.bootcamp.fundaciones" }
+  }
+}

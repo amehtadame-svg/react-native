@@ -1,0 +1,131 @@
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  Animated,
+  FlatList,
+  LayoutAnimation,
+  Platform,
+  Pressable,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  UIManager,
+  View,
+} from 'react-native';
+import { AnimatedButton } from '../components/AnimatedButton';
+import { AnimatedCard } from '../components/AnimatedCard';
+import { ProgressBar } from '../components/ProgressBar';
+
+if (Platform.OS === 'android') {
+  UIManager.setLayoutAnimationEnabledExperimental?.(true);
+}
+
+interface Item {
+  id: string;
+  name: string;
+  description: string;
+  progress: number;
+}
+
+const INITIAL: Item[] = [
+  { id: '1', name: 'Manos Unidas', description: 'Educación para la infancia', progress: 0.8 },
+  { id: '2', name: 'Verde Futuro', description: 'Restauración de ecosistemas', progress: 0.45 },
+  { id: '3', name: 'Huellas de Esperanza', description: 'Rescate y bienestar animal', progress: 0.65 },
+  { id: '4', name: 'Red de Alimentos', description: 'Seguridad alimentaria', progress: 0.3 },
+];
+
+export function HomeScreen({ navigation }: any): React.JSX.Element {
+  const [items, setItems] = useState(INITIAL);
+
+  // Un Animated.Value por ítem — se mantiene sincronizado con `items`
+  // al añadir (add) y al eliminar (remove).
+  const anims = useRef<Animated.Value[]>(INITIAL.map(() => new Animated.Value(0))).current;
+
+  useEffect(() => {
+    Animated.stagger(
+      80,
+      anims.map((value) =>
+        Animated.timing(value, { toValue: 1, duration: 400, useNativeDriver: true }),
+      ),
+    ).start();
+  }, [anims]);
+
+  const remove = (id: string) => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    const index = items.findIndex((item) => item.id === id);
+    if (index >= 0) anims.splice(index, 1);
+    setItems((current) => current.filter((item) => item.id !== id));
+  };
+
+  const add = () => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
+    // El nuevo ítem necesita su propio Animated.Value (antes se creaba
+    // dentro del render, lo que generaba un valor nuevo en cada render).
+    const value = new Animated.Value(0);
+    anims.push(value);
+    Animated.timing(value, { toValue: 1, duration: 400, useNativeDriver: true }).start();
+    setItems((current) => [
+      ...current,
+      {
+        id: `${Date.now()}`,
+        name: `Fundación ${current.length + 1}`,
+        description: 'Nueva iniciativa comunitaria',
+        progress: Math.random(),
+      },
+    ]);
+  };
+
+  return (
+    <SafeAreaView style={styles.screen}>
+      <FlatList
+        data={items}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.list}
+        ListHeaderComponent={
+          <View>
+            <Text style={styles.title}>Fundaciones que inspiran</Text>
+            <Text style={styles.subtitle}>{items.length} organizaciones</Text>
+          </View>
+        }
+        renderItem={({ item, index }) => {
+          const value = anims[index] ?? new Animated.Value(1);
+          return (
+            <Animated.View
+              style={{
+                opacity: value,
+                transform: [
+                  { translateY: value.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) },
+                ],
+              }}
+            >
+              <AnimatedCard onPress={() => navigation?.navigate?.('Detail', { itemId: item.id })}>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.description}>{item.description}</Text>
+                <ProgressBar progress={item.progress} label="Impacto" />
+                <Pressable style={styles.remove} onPress={() => remove(item.id)}>
+                  <Text style={styles.removeText}>Eliminar</Text>
+                </Pressable>
+              </AnimatedCard>
+            </Animated.View>
+          );
+        }}
+        ListFooterComponent={
+          <View style={styles.footer}>
+            <AnimatedButton label="+ Añadir fundación" onPress={add} />
+          </View>
+        }
+      />
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  screen: { flex: 1, backgroundColor: '#0d1117' },
+  list: { padding: 18, gap: 12 },
+  title: { color: '#fff', fontSize: 26, fontWeight: 'bold' },
+  subtitle: { color: '#8b949e', marginBottom: 10 },
+  name: { color: '#fff', fontSize: 17, fontWeight: '700' },
+  description: { color: '#c9d1d9', marginVertical: 8 },
+  remove: { alignSelf: 'flex-end', marginTop: 8 },
+  removeText: { color: '#f85149', fontSize: 12 },
+  footer: { marginTop: 8 },
+});
