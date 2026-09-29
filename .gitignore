@@ -1,0 +1,15 @@
+# Dependencias
+node_modules/
+
+# Expo
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Entorno
+.env*.local
+
+# Editor / SO
+.DS_Store
+*.log

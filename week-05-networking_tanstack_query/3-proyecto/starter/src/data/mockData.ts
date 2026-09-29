@@ -1,0 +1,1 @@
+import type { Item } from '../types'; export const ITEMS: Item[] = [{ id: 1, name: 'Manos Unidas', description: 'Educación para la infancia.', mission: 'Educación', category: 'Educación', city: 'Bogotá', impact: '320 niños' }, { id: 2, name: 'Verde Futuro', description: 'Restauración ambiental.', mission: 'Ambiente', category: 'Ambiente', city: 'Cali', impact: '2.400 árboles' }];

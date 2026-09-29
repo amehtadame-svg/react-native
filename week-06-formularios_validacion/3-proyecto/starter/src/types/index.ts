@@ -1,0 +1,1 @@
+export interface Item { id: number; title: string; body: string; userId: number; category?: string; city?: string; } export interface CreateItemPayload { title: string; body: string; userId: number; category?: string; city?: string; } export interface UpdateItemPayload extends CreateItemPayload { id: number; }

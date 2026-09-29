@@ -1,0 +1,1 @@
+export interface Item { id: string; name: string; description: string; progress?: number; mission?: string; category?: string; city?: string; } export interface ApiResponse<T> { data: T[]; total: number; }
